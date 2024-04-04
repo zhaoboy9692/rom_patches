@@ -1,7 +1,7 @@
-From 3c04c47a4da2b67dc33dbd41b5d46cc3fc9a723f Mon Sep 17 00:00:00 2001
+From 9e742a8797806956230e73b5896da1e010a9b594 Mon Sep 17 00:00:00 2001
 From: Gabriele M <moto.falcon.git@gmail.com>
 Date: Wed, 25 Jan 2017 02:09:04 +0100
-Subject: [PATCH 2/5] sepolicy: Allow recovery to alter /
+Subject: [PATCH 2/6] sepolicy: Allow recovery to alter /
 
 This is needed for /etc/fstab, /adb_keys and volmgr
 
@@ -27,10 +27,10 @@ index 17a0c372d..c977c295c 100644
  # Restrict context mounts to specific types marked with
  # the contextmount_type attribute.
 diff --git a/public/domain.te b/public/domain.te
-index 48c8aa81e..c336d5baa 100644
+index 17a0c372d..c977c295c 100644
 --- a/public/domain.te
 +++ b/public/domain.te
-@@ -498,8 +498,8 @@ neverallow { domain -kernel with_asan(`-asan_extract') } { system_file_type vend
+@@ -487,8 +487,8 @@ neverallow { domain -kernel with_asan(`-asan_extract') } { system_file_type vend
  # Don't allow mounting on top of /system files or directories
  neverallow * exec_type:dir_file_class_set mounton;
  
@@ -42,5 +42,5 @@ index 48c8aa81e..c336d5baa 100644
  # Restrict context mounts to specific types marked with
  # the contextmount_type attribute.
 -- 
-2.39.2
+2.30.2
 
