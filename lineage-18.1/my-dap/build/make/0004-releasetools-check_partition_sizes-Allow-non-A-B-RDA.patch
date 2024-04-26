@@ -1,4 +1,4 @@
-From 061b9f39252ee368a77eac68c527b2dd5a399f7a Mon Sep 17 00:00:00 2001
+From 53b9416e43e843f11637df0e390e03c06de92179 Mon Sep 17 00:00:00 2001
 From: Yumi Yukimura <me.cafebabe@gmail.com>
 Date: Mon, 18 Mar 2024 17:13:22 +0800
 Subject: [PATCH 4/4] releasetools: check_partition_sizes: Allow non-A/B RDAP

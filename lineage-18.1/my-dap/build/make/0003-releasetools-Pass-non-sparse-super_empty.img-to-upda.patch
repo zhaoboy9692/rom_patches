@@ -1,4 +1,4 @@
-From 2f7b2ff211e5f6b26cfc2fd81faba6f5420abf16 Mon Sep 17 00:00:00 2001
+From af7856db40b9d78b41eb4a3cdbc0166c790cfe63 Mon Sep 17 00:00:00 2001
 From: Yumi Yukimura <me.cafebabe@gmail.com>
 Date: Sun, 24 Mar 2024 02:19:46 +0800
 Subject: [PATCH 3/4] releasetools: Pass non-sparse super_empty.img to
@@ -9,11 +9,11 @@ Subject: [PATCH 3/4] releasetools: Pass non-sparse super_empty.img to
 
 Change-Id: I73687009a2cb243aba1bfec6f357c8ff25f27784
 ---
- tools/releasetools/add_img_to_target_files.py |  4 ++++
- tools/releasetools/build_super_image.py       |  8 ++++----
- tools/releasetools/common.py                  | 12 ++++++++++--
- tools/releasetools/ota_from_target_files.py   |  9 +++++++++
- 4 files changed, 27 insertions(+), 6 deletions(-)
+ tools/releasetools/add_img_to_target_files.py | 4 ++++
+ tools/releasetools/build_super_image.py       | 8 ++++----
+ tools/releasetools/common.py                  | 3 ++-
+ tools/releasetools/ota_from_target_files.py   | 8 ++++++++
+ 4 files changed, 18 insertions(+), 5 deletions(-)
 
 diff --git a/tools/releasetools/add_img_to_target_files.py b/tools/releasetools/add_img_to_target_files.py
 index f58b6978a8..9a7b3d7ec4 100644
@@ -67,52 +67,35 @@ index 6a75dfbc1a..0cd6160d43 100755
    if isinstance(inp, str):
      if os.path.isdir(inp):
 diff --git a/tools/releasetools/common.py b/tools/releasetools/common.py
-index a65c5d80db..94450be921 100644
+index a65c5d80db..c05be40f7e 100644
 --- a/tools/releasetools/common.py
 +++ b/tools/releasetools/common.py
-@@ -3186,6 +3186,9 @@ class DynamicPartitionsDifference(object):
-     if progress_dict is None:
-       progress_dict = {}
- 
-+    self._have_super_empty = \
-+      info_dict.get("build_super_empty_partition") == "true"
-+
-     self._build_without_vendor = build_without_vendor
-     self._remove_all_before_apply = False
-     if source_info_dict is None:
-@@ -3283,8 +3286,13 @@ class DynamicPartitionsDifference(object):
-     ZipWrite(output_zip, op_list_path, "dynamic_partitions_op_list")
+@@ -3284,7 +3284,8 @@ class DynamicPartitionsDifference(object):
  
      script.Comment('Update dynamic partition metadata')
--    script.AppendExtra('assert(update_dynamic_partitions('
+     script.AppendExtra('assert(update_dynamic_partitions('
 -                       'package_extract_file("dynamic_partitions_op_list")));')
-+    if self._have_super_empty:
-+      script.AppendExtra('assert(update_dynamic_partitions('
-+                        'package_extract_file("dynamic_partitions_op_list"), '
-+                        'package_extract_file("unsparse_super_empty.img")));')
-+    else:
-+      script.AppendExtra('assert(update_dynamic_partitions('
-+                        'package_extract_file("dynamic_partitions_op_list")));')
++                      'package_extract_file("dynamic_partitions_op_list"), '
++                      'package_extract_file("unsparse_super_empty.img")));')
  
      if write_verify_script:
        for p, u in self._partition_updates.items():
 diff --git a/tools/releasetools/ota_from_target_files.py b/tools/releasetools/ota_from_target_files.py
-index 479a8983cd..3d90d31a63 100755
+index 479a8983cd..b1f00e7031 100755
 --- a/tools/releasetools/ota_from_target_files.py
 +++ b/tools/releasetools/ota_from_target_files.py
-@@ -846,6 +846,15 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
+@@ -846,6 +846,14 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
    progress_dict["system"] = system_progress
  
    if target_info.get('use_dynamic_partitions') == "true":
 +    # Add non-sparse super empty image to OTA package if it exists
-+    if target_info.get('build_super_empty_partition') == "true":
-+      unsparse_super_empty_image_name = "unsparse_super_empty.img"
-+      unsparse_super_empty_image_path = os.path.join(OPTIONS.input_tmp, "IMAGES",
-+          unsparse_super_empty_image_name)
-+      unsparse_super_empty_image = common.File.FromLocalFile(
-+          unsparse_super_empty_image_name, unsparse_super_empty_image_path)
-+      common.ZipWriteStr(output_zip, unsparse_super_empty_image_name,
-+          unsparse_super_empty_image.data)
++    unsparse_super_empty_image_name = "unsparse_super_empty.img"
++    unsparse_super_empty_image_path = os.path.join(OPTIONS.input_tmp, "IMAGES",
++        unsparse_super_empty_image_name)
++    unsparse_super_empty_image = common.File.FromLocalFile(
++        unsparse_super_empty_image_name, unsparse_super_empty_image_path)
++    common.ZipWriteStr(output_zip, unsparse_super_empty_image_name,
++        unsparse_super_empty_image.data)
      # Use empty source_info_dict to indicate that all partitions / groups must
      # be re-added.
      dynamic_partitions_diff = common.DynamicPartitionsDifference(
