@@ -1,4 +1,4 @@
-From 830c612452f416ea21651db139ee63ae16a91b87 Mon Sep 17 00:00:00 2001
+From 4004ff5a27110b7c9947810739c40ce966cc1a90 Mon Sep 17 00:00:00 2001
 From: me-cafebabe <me.cafebabe@gmail.com>
 Date: Sun, 20 Aug 2023 08:27:00 +0000
 Subject: [PATCH] bpfloader: Don't spam dmesg please
@@ -9,10 +9,10 @@ Change-Id: Ic47a58b6113cbab1ba7f85dc390c3bb0cd7883ed
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/bpfloader/BpfLoader.cpp b/bpfloader/BpfLoader.cpp
-index 29da777..d4f202d 100644
+index 08fd72d..7d9b5dc 100644
 --- a/bpfloader/BpfLoader.cpp
 +++ b/bpfloader/BpfLoader.cpp
-@@ -176,9 +176,9 @@ int writeProcSysFile(const char *filename, const char *value) {
+@@ -187,9 +187,9 @@ int writeProcSysFile(const char *filename, const char *value) {
      return 0;
  }
  
@@ -23,8 +23,8 @@ index 29da777..d4f202d 100644
 +    //(void)argc;
 +    //android::base::InitLogging(argv, &android::base::KernelLogger);
  
-     // Linux 5.16-rc1 changed the default to 2 (disabled but changeable), but we need 0 (enabled)
-     // (this writeFile is known to fail on at least 4.19, but always defaults to 0 on pre-5.13,
+     // Create all the pin subdirectories
+     // (this must be done first to allow selinux_context and pin_subdir functionality,
 -- 
 2.39.2
 
