@@ -1,0 +1,34 @@
+From 20f3de85dcc9b95fb1cea1ff5d43b42379deca4a Mon Sep 17 00:00:00 2001
+From: Pranav Vashi <neobuddy89@gmail.com>
+Date: Sat, 16 Oct 2021 00:12:03 +0530
+Subject: [PATCH] build: Always use release-keys
+
+* [@techyminati]
+  - Some payment/banking apps check for this and report device as rooted, I know this is dirty hack,
+    the proper fix should be signing builds , but since most of developers dont care about signing builds
+    lets hardcode 'release-keys' here.
+Signed-off-by: Pranav Vashi <neobuddy89@gmail.com>
+---
+ core/Makefile | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/core/Makefile b/core/Makefile
+index 96be60697..4867ee196 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -324,11 +324,7 @@ endif
+ # non-default dev keys (usually private keys from a vendor directory).
+ # Both of these tags will be removed and replaced with "release-keys"
+ # when the target-files is signed in a post-build step.
+-ifeq ($(DEFAULT_SYSTEM_DEV_CERTIFICATE),build/make/target/product/security/testkey)
+-BUILD_KEYS := test-keys
+-else
+-BUILD_KEYS := dev-keys
+-endif
++BUILD_KEYS := release-keys
+ BUILD_VERSION_TAGS += $(BUILD_KEYS)
+ BUILD_VERSION_TAGS := $(subst $(space),$(comma),$(sort $(BUILD_VERSION_TAGS)))
+ 
+-- 
+2.30.2
+
