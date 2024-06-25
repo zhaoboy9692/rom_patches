@@ -1,0 +1,54 @@
+From 61dc1fddfe04b9ca3e4b7e6131ab0230b3d25a46 Mon Sep 17 00:00:00 2001
+From: Dmitry Muhomor <muhomor.dmitry@gmail.com>
+Date: Thu, 21 Mar 2024 17:18:31 +0200
+Subject: [PATCH] Revert "Remove strip.keep_symbols from libart defaults"
+
+This reverts commit c7f5eb7654a9689f03dc0f038ad802758ed24623.
+
+Change-Id: I16a080b2e9767f5eff304b009238d196c2f8f453
+---
+ runtime/Android.bp | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+
+diff --git a/runtime/Android.bp b/runtime/Android.bp
+index 17f09cf814..8def551cfa 100644
+--- a/runtime/Android.bp
++++ b/runtime/Android.bp
+@@ -43,6 +43,37 @@ cc_defaults {
+                 "-Wno-unused-command-line-argument",
+             ],
+         },
++        android_arm: {
++            // Arm 32 bit does not produce complete exidx unwind information
++            // so keep the .debug_frame which is relatively small and does
++            // include needed unwind information.
++            // See b/132992102 and b/145790995 for details.
++            strip: {
++                keep_symbols_and_debug_frame: true,
++            },
++        },
++        // For all other architectures, leave the symbols in the shared library
++        // so that stack unwinders can produce meaningful name resolution.
++        android_arm64: {
++            strip: {
++                keep_symbols: true,
++            },
++        },
++        android_riscv64: {
++            strip: {
++                keep_symbols: true,
++            },
++        },
++        android_x86: {
++            strip: {
++                keep_symbols: true,
++            },
++        },
++        android_x86_64: {
++            strip: {
++                keep_symbols: true,
++            },
++        },
+     },
+ }
+ 
