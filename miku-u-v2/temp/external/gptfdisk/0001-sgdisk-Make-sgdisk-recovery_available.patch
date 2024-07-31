@@ -1,0 +1,25 @@
+From 940af77b1bca098014ad0ce82a3bbef95a3a2469 Mon Sep 17 00:00:00 2001
+From: Nolen Johnson <johnsonnolen@gmail.com>
+Date: Tue, 13 Jun 2023 14:19:58 -0400
+Subject: [PATCH] sgdisk: Make sgdisk recovery_available
+
+Change-Id: If5c3ea6142c49f13655fbc1713de871569edbdd8
+---
+ Android.bp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Android.bp b/Android.bp
+index 17e0468..ea2269a 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -61,6 +61,7 @@ cc_binary {
+ 
+     shared_libs: ["libext2_uuid"],
+     static_libs: ["libgptf"],
++    recovery_available: true,
+ }
+ 
+ lib_common_srcs = [
+-- 
+2.39.2
+
