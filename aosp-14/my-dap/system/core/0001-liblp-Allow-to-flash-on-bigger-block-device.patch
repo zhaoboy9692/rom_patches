@@ -1,0 +1,30 @@
+From 63a17a1964ecd3411d2a28efbb8ed8a0ec87e836 Mon Sep 17 00:00:00 2001
+From: me-cafebabe <me_cafebabe@hotmail.com>
+Date: Sat, 16 Jul 2022 20:10:52 +0000
+Subject: [PATCH] liblp: Allow to flash on bigger block device
+
+Needed for using Retrofit Dynamic Partitions on unified targets, which has different partition sizes on different devices.
+
+Change-Id: I2b4c05401569ce5fc301ebafa7d130c3b0d87c64
+---
+ fs_mgr/liblp/writer.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fs_mgr/liblp/writer.cpp b/fs_mgr/liblp/writer.cpp
+index 2708efa15..7db0b787e 100644
+--- a/fs_mgr/liblp/writer.cpp
++++ b/fs_mgr/liblp/writer.cpp
+@@ -138,8 +138,8 @@ static bool ValidateAndSerializeMetadata([[maybe_unused]] const IPartitionOpener
+             PERROR << partition_name << ": ioctl";
+             return false;
+         }
+-        if (info.size != block_device.size) {
+-            LERROR << "Block device " << partition_name << " size mismatch (expected"
++        if (info.size < block_device.size) {
++            LERROR << "Block device " << partition_name << " size is too small (expected"
+                    << block_device.size << ", got " << info.size << ")";
+             return false;
+         }
+-- 
+2.39.2
+
