@@ -1,0 +1,26 @@
+From f7a0fb61a244cdbf65094f28a286164b792a47e9 Mon Sep 17 00:00:00 2001
+From: Android Build Server 2 <build@AndroidBuild-2>
+Date: Thu, 1 Aug 2024 03:12:19 +0000
+Subject: [PATCH] bpfloader: Don't spam dmesg please
+
+---
+ bpfloader/BpfLoader.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/bpfloader/BpfLoader.cpp b/bpfloader/BpfLoader.cpp
+index f153b40..a258907 100644
+--- a/bpfloader/BpfLoader.cpp
++++ b/bpfloader/BpfLoader.cpp
+@@ -178,7 +178,8 @@ int writeProcSysFile(const char *filename, const char *value) {
+ 
+ int main(int argc, char** argv) {
+     (void)argc;
+-    android::base::InitLogging(argv, &android::base::KernelLogger);
++    (void)argv;
++    //android::base::InitLogging(argv, &android::base::KernelLogger);
+ 
+     // Linux 5.16-rc1 changed the default to 2 (disabled but changeable), but we need 0 (enabled)
+     // (this writeFile is known to fail on at least 4.19, but always defaults to 0 on pre-5.13,
+-- 
+2.39.2
+
