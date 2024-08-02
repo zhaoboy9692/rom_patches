@@ -1,7 +1,7 @@
-From 940af77b1bca098014ad0ce82a3bbef95a3a2469 Mon Sep 17 00:00:00 2001
+From 82726b9fd491e78a479e3c49d012441b1d843e4e Mon Sep 17 00:00:00 2001
 From: Nolen Johnson <johnsonnolen@gmail.com>
 Date: Tue, 13 Jun 2023 14:19:58 -0400
-Subject: [PATCH] sgdisk: Make sgdisk recovery_available
+Subject: [PATCH 2/2] sgdisk: Make sgdisk recovery_available
 
 Change-Id: If5c3ea6142c49f13655fbc1713de871569edbdd8
 ---
@@ -9,10 +9,10 @@ Change-Id: If5c3ea6142c49f13655fbc1713de871569edbdd8
  1 file changed, 1 insertion(+)
 
 diff --git a/Android.bp b/Android.bp
-index 17e0468..ea2269a 100644
+index 04296f2..99a446a 100644
 --- a/Android.bp
 +++ b/Android.bp
-@@ -61,6 +61,7 @@ cc_binary {
+@@ -58,6 +58,7 @@ cc_binary {
  
      shared_libs: ["libext2_uuid"],
      static_libs: ["libgptf"],
@@ -21,5 +21,5 @@ index 17e0468..ea2269a 100644
  
  lib_common_srcs = [
 -- 
-2.39.2
+2.30.2
 

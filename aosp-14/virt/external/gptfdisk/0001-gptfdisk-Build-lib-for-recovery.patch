@@ -1,7 +1,7 @@
-From 482184d32454dfc7f0f96ae5f25a62d910154cc6 Mon Sep 17 00:00:00 2001
+From 99afbe0a8da81f01e395d9d655c4a41602b67d99 Mon Sep 17 00:00:00 2001
 From: Tom Marshall <tdm@cyngn.com>
 Date: Wed, 4 Nov 2015 15:48:02 -0800
-Subject: [PATCH] gptfdisk: Build lib for recovery
+Subject: [PATCH 1/2] gptfdisk: Build lib for recovery
 
 Change-Id: Ie4b37f7b628b04fa3d2224e1c99b7b08aef5cabe
 ---
@@ -10,10 +10,10 @@ Change-Id: Ie4b37f7b628b04fa3d2224e1c99b7b08aef5cabe
  2 files changed, 19 insertions(+), 1 deletion(-)
 
 diff --git a/Android.bp b/Android.bp
-index 94a18e2..99a446a 100644
+index c1a916a..04296f2 100644
 --- a/Android.bp
 +++ b/Android.bp
-@@ -82,6 +82,7 @@ cc_library_static {
+@@ -81,6 +81,7 @@ cc_library_static {
      name: "libgptf",
      defaults: ["gptfdisk_default_flags"],
      host_supported: true,
@@ -21,7 +21,7 @@ index 94a18e2..99a446a 100644
  
      export_include_dirs: ["."],
      srcs: lib_common_srcs + ["diskio-unix.cc"],
-@@ -100,3 +101,20 @@ cc_library_static {
+@@ -99,3 +100,20 @@ cc_library_static {
  
      shared_libs: ["libext2_uuid"],
  }
@@ -43,10 +43,10 @@ index 94a18e2..99a446a 100644
 +    static_libs: ["libgptf"],
 +}
 diff --git a/sgdisk.cc b/sgdisk.cc
-index bdd077b..7c26b60 100644
+index 1892e2d..789626b 100644
 --- a/sgdisk.cc
 +++ b/sgdisk.cc
-@@ -88,7 +88,7 @@ static int android_dump(char* device) {
+@@ -87,7 +87,7 @@ static int android_dump(char* device) {
      return 0;
  }
  
@@ -56,5 +56,5 @@ index bdd077b..7c26b60 100644
          if (!strcmp("--android-dump", argv[i])) {
              return android_dump(argv[i + 1]);
 -- 
-2.39.2
+2.30.2
 
