@@ -1,0 +1,31 @@
+From 0e1d60885b3786cb1e58d717af7ed4121c947eb7 Mon Sep 17 00:00:00 2001
+From: Yumi Yukimura <me.cafebabe@gmail.com>
+Date: Fri, 26 Jul 2024 02:49:14 +0800
+Subject: [PATCH] bacon: Make it possible to let other build targets depend on
+ lineage OTA package
+
+Change-Id: I04ed91b62beed9728c354ea73f7c0baa72213808
+---
+ build/tasks/bacon.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/build/tasks/bacon.mk b/build/tasks/bacon.mk
+index 4f8bedc9..0e46f561 100644
+--- a/build/tasks/bacon.mk
++++ b/build/tasks/bacon.mk
+@@ -20,8 +20,10 @@ LINEAGE_TARGET_PACKAGE := $(PRODUCT_OUT)/lineage-$(LINEAGE_VERSION).zip
+ 
+ SHA256 := prebuilts/build-tools/path/$(HOST_PREBUILT_TAG)/sha256sum
+ 
+-.PHONY: bacon
+-bacon: $(INTERNAL_OTA_PACKAGE_TARGET)
++$(LINEAGE_TARGET_PACKAGE): $(INTERNAL_OTA_PACKAGE_TARGET)
+ 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(LINEAGE_TARGET_PACKAGE)
+ 	$(hide) $(SHA256) $(LINEAGE_TARGET_PACKAGE) | sed "s|$(PRODUCT_OUT)/||" > $(LINEAGE_TARGET_PACKAGE).sha256sum
+ 	@echo "Package Complete: $(LINEAGE_TARGET_PACKAGE)" >&2
++
++.PHONY: bacon
++bacon: $(LINEAGE_TARGET_PACKAGE)
+-- 
+2.39.2
+
