@@ -1,0 +1,66 @@
+From 031211919890f9dcc7941a3bbfc429fc4cbac1d2 Mon Sep 17 00:00:00 2001
+From: Sebastiano Barezzi <seba@sebaubuntu.dev>
+Date: Sat, 9 Dec 2023 00:39:46 +0100
+Subject: [PATCH] SettingsLib: Handle WifiService being null
+
+During development the Wi-Fi service might not work, let's handle this
+case so the Setting app doesn't crash when opening the about phone
+page
+
+Logic borrowed from the Bluetooth controller
+
+Change-Id: Id8f6ba5d7cbac5780363612b50848ecfea10bc04
+---
+ ...stractWifiMacAddressPreferenceController.java | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
+
+diff --git a/packages/SettingsLib/src/com/android/settingslib/deviceinfo/AbstractWifiMacAddressPreferenceController.java b/packages/SettingsLib/src/com/android/settingslib/deviceinfo/AbstractWifiMacAddressPreferenceController.java
+index 1d433e767e5b..943e3fc27ebb 100644
+--- a/packages/SettingsLib/src/com/android/settingslib/deviceinfo/AbstractWifiMacAddressPreferenceController.java
++++ b/packages/SettingsLib/src/com/android/settingslib/deviceinfo/AbstractWifiMacAddressPreferenceController.java
+@@ -59,7 +59,7 @@ public abstract class AbstractWifiMacAddressPreferenceController
+ 
+     @Override
+     public boolean isAvailable() {
+-        return true;
++        return mWifiManager != null;
+     }
+ 
+     @Override
+@@ -70,10 +70,8 @@ public abstract class AbstractWifiMacAddressPreferenceController
+     @Override
+     public void displayPreference(PreferenceScreen screen) {
+         super.displayPreference(screen);
+-        if (isAvailable()) {
+-            mWifiMacAddress = screen.findPreference(KEY_WIFI_MAC_ADDRESS);
+-            updateConnectivity();
+-        }
++        mWifiMacAddress = screen.findPreference(KEY_WIFI_MAC_ADDRESS);
++        updateConnectivity();
+     }
+ 
+     @Override
+@@ -84,16 +82,16 @@ public abstract class AbstractWifiMacAddressPreferenceController
+     @SuppressLint("HardwareIds")
+     @Override
+     protected void updateConnectivity() {
++        if (mWifiManager == null || mWifiMacAddress == null) {
++            return;
++        }
++
+         final String[] macAddresses = mWifiManager.getFactoryMacAddresses();
+         String macAddress = null;
+         if (macAddresses != null && macAddresses.length > 0) {
+             macAddress = macAddresses[0];
+         }
+ 
+-        if (mWifiMacAddress == null) {
+-            return;
+-        }
+-
+         if (TextUtils.isEmpty(macAddress) || macAddress.equals(WifiInfo.DEFAULT_MAC_ADDRESS)) {
+             mWifiMacAddress.setSummary(R.string.status_unavailable);
+         } else {
+-- 
+2.30.2
+

@@ -1,0 +1,83 @@
+From 211d73656e68801cd03fc175729032f5163f4ad8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?G=C3=A9rard=20Parat?= <github@lunique.fr>
+Date: Tue, 26 Mar 2024 14:31:21 +0100
+Subject: [PATCH] releasetools: Make recovery patch use bsdiff exclusively
+
+It seems like switching from minigzip to toybox gzip (bug: 288169261)
+makes imgdiff fail in in this way:
+* W imgdiff : imgdiff.cpp:1435 Failed to reconstruct target deflate chunk 3 []; treating as normal
+* E imgdiff : imgdiff.cpp:1390 Failed to set bonus data
+
+Test: Sign non-AB target files package
+Change-Id: I29f1d8f1168347141d80860e8ed02e19b0031447
+---
+ tools/releasetools/common.py | 28 +++-------------------------
+ 1 file changed, 3 insertions(+), 25 deletions(-)
+
+diff --git a/tools/releasetools/common.py b/tools/releasetools/common.py
+index 2c7e531224..a2755442b3 100644
+--- a/tools/releasetools/common.py
++++ b/tools/releasetools/common.py
+@@ -3742,12 +3742,10 @@ def MakeRecoveryPatch(input_dir, output_sink, recovery_img, boot_img,
+   if board_uses_vendorimage:
+     # In this case, the output sink is rooted at VENDOR
+     recovery_img_path = "etc/recovery.img"
+-    recovery_resource_dat_path = "VENDOR/etc/recovery-resource.dat"
+     sh_dir = "bin"
+   else:
+     # In this case the output sink is rooted at SYSTEM
+     recovery_img_path = "vendor/etc/recovery.img"
+-    recovery_resource_dat_path = "SYSTEM/vendor/etc/recovery-resource.dat"
+     sh_dir = "vendor/bin"
+ 
+   if full_recovery_image:
+@@ -3755,26 +3753,7 @@ def MakeRecoveryPatch(input_dir, output_sink, recovery_img, boot_img,
+ 
+   else:
+     system_root_image = info_dict.get("system_root_image") == "true"
+-    include_recovery_dtbo = info_dict.get("include_recovery_dtbo") == "true"
+-    include_recovery_acpio = info_dict.get("include_recovery_acpio") == "true"
+-    path = os.path.join(input_dir, recovery_resource_dat_path)
+-    # With system-root-image, boot and recovery images will have mismatching
+-    # entries (only recovery has the ramdisk entry) (Bug: 72731506). Use bsdiff
+-    # to handle such a case.
+-    if system_root_image or include_recovery_dtbo or include_recovery_acpio:
+-      diff_program = ["bsdiff"]
+-      bonus_args = ""
+-      assert not os.path.exists(path)
+-    else:
+-      diff_program = ["imgdiff"]
+-      if os.path.exists(path):
+-        diff_program.append("-b")
+-        diff_program.append(path)
+-        bonus_args = "--bonus /vendor/etc/recovery-resource.dat"
+-      else:
+-        bonus_args = ""
+-
+-    d = Difference(recovery_img, boot_img, diff_program=diff_program)
++    d = Difference(recovery_img, boot_img)
+     _, _, patch = d.ComputePatch()
+     output_sink("recovery-from-boot.p", patch)
+ 
+@@ -3814,7 +3793,7 @@ fi
+     sh = """#!/vendor/bin/sh
+ exit 0
+ if ! applypatch --check %(recovery_type)s:%(recovery_device)s:%(recovery_size)d:%(recovery_sha1)s; then
+-  applypatch %(bonus_args)s \\
++  applypatch \\
+           --patch /vendor/recovery-from-boot.p \\
+           --source %(boot_type)s:%(boot_device)s:%(boot_size)d:%(boot_sha1)s \\
+           --target %(recovery_type)s:%(recovery_device)s:%(recovery_size)d:%(recovery_sha1)s && \\
+@@ -3830,8 +3809,7 @@ fi
+        'boot_type': boot_type,
+        'boot_device': boot_device + '$(getprop ro.boot.slot_suffix)',
+        'recovery_type': recovery_type,
+-       'recovery_device': recovery_device + '$(getprop ro.boot.slot_suffix)',
+-       'bonus_args': bonus_args}
++       'recovery_device': recovery_device + '$(getprop ro.boot.slot_suffix)'}
+ 
+   # The install script location moved from /system/etc to /system/bin in the L
+   # release. In the R release it is in VENDOR/bin or SYSTEM/vendor/bin.
+-- 
+2.30.2
+
