@@ -1,0 +1,202 @@
+From d3317b34ce3bd9586eaee40c45d526ad12e590a0 Mon Sep 17 00:00:00 2001
+From: Ido Ben-Hur <idoybh2@gmail.com>
+Date: Fri, 12 Jul 2024 09:24:49 +0300
+Subject: [PATCH] SystemUI: screenrecord: Allow disabling HEVC toggle via a
+ config
+
+some devices may want it disabled
+
+Change-Id: I1e5c265980f34a943b2466b1d84d57e009961f8d
+---
+ .../SystemUI/res/layout/screen_record_dialog.xml  |  3 ++-
+ packages/SystemUI/res/values/lineage_config.xml   |  3 +++
+ .../screenrecord/RecordingController.java         |  8 ++++++++
+ .../systemui/screenrecord/ScreenRecordDialog.java | 15 ++++++++++++---
+ .../ScreenRecordPermissionDialogDelegate.kt       | 12 +++++++++---
+ 5 files changed, 34 insertions(+), 7 deletions(-)
+
+diff --git a/packages/SystemUI/res/layout/screen_record_dialog.xml b/packages/SystemUI/res/layout/screen_record_dialog.xml
+index 5a316d5c9e3c..174498cd6d72 100644
+--- a/packages/SystemUI/res/layout/screen_record_dialog.xml
++++ b/packages/SystemUI/res/layout/screen_record_dialog.xml
+@@ -303,6 +303,7 @@
+                 </LinearLayout>
+ 
+                 <LinearLayout
++                    android:id="@+id/show_hevc"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:orientation="horizontal"
+@@ -376,4 +377,4 @@
+             </LinearLayout>
+         </LinearLayout>
+     </ScrollView>
+-</LinearLayout>
+\ No newline at end of file
++</LinearLayout>
+diff --git a/packages/SystemUI/res/values/lineage_config.xml b/packages/SystemUI/res/values/lineage_config.xml
+index 79c2865567a7..f779a97a21a6 100644
+--- a/packages/SystemUI/res/values/lineage_config.xml
++++ b/packages/SystemUI/res/values/lineage_config.xml
+@@ -70,4 +70,7 @@
+          Possible values: 3, 3.1, 3.2, 4, 4.1, 4.2
+     -->
+     <string name="config_screenRecorderAVCProfileLevel" translatable="false">4.2</string>
++
++    <!-- Whether to enable HEVC toggle for screenrecord -->
++    <bool name="config_screenRecordHEVC">true</bool>
+ </resources>
+diff --git a/packages/SystemUI/src/com/android/systemui/screenrecord/RecordingController.java b/packages/SystemUI/src/com/android/systemui/screenrecord/RecordingController.java
+index a4ba2a241275..fedf601c2ea0 100644
+--- a/packages/SystemUI/src/com/android/systemui/screenrecord/RecordingController.java
++++ b/packages/SystemUI/src/com/android/systemui/screenrecord/RecordingController.java
+@@ -44,6 +44,7 @@ import com.android.systemui.mediaprojection.SessionCreationSource;
+ import com.android.systemui.mediaprojection.devicepolicy.ScreenCaptureDevicePolicyResolver;
+ import com.android.systemui.mediaprojection.devicepolicy.ScreenCaptureDisabledDialog;
+ import com.android.systemui.plugins.ActivityStarter;
++import com.android.systemui.res.R;
+ import com.android.systemui.settings.UserContextProvider;
+ import com.android.systemui.settings.UserTracker;
+ import com.android.systemui.statusbar.phone.SystemUIDialog;
+@@ -77,6 +78,7 @@ public class RecordingController
+     private final UserTracker mUserTracker;
+     private final MediaProjectionMetricsLogger mMediaProjectionMetricsLogger;
+     private final SystemUIDialog.Factory mDialogFactory;
++    private final boolean mIsHEVCAllowed;
+ 
+     protected static final String INTENT_UPDATE_STATE =
+             "com.android.systemui.screenrecord.UPDATE_STATE";
+@@ -133,6 +135,8 @@ public class RecordingController
+         mUserTracker = userTracker;
+         mMediaProjectionMetricsLogger = mediaProjectionMetricsLogger;
+         mDialogFactory = dialogFactory;
++        mIsHEVCAllowed = context.getResources().getBoolean(
++                R.bool.config_screenRecordHEVC);
+ 
+         BroadcastOptions options = BroadcastOptions.makeBasic();
+         options.setInteractive(true);
+@@ -298,6 +302,10 @@ public class RecordingController
+         }
+     }
+ 
++    public boolean isHEVCAllowed() {
++        return mIsHEVCAllowed;
++    }
++
+     @Override
+     public void addCallback(@NonNull RecordingStateChangeCallback listener) {
+         mListeners.add(listener);
+diff --git a/packages/SystemUI/src/com/android/systemui/screenrecord/ScreenRecordDialog.java b/packages/SystemUI/src/com/android/systemui/screenrecord/ScreenRecordDialog.java
+index 0478d9e8b06b..219d2b553a32 100644
+--- a/packages/SystemUI/src/com/android/systemui/screenrecord/ScreenRecordDialog.java
++++ b/packages/SystemUI/src/com/android/systemui/screenrecord/ScreenRecordDialog.java
+@@ -75,6 +75,7 @@ public class ScreenRecordDialog extends SystemUIDialog {
+ 
+     private final RecordingController mController;
+     private final UserContextProvider mUserContextProvider;
++    private final boolean mIsHEVCAllowed;
+     @Nullable
+     private final Runnable mOnStartRecordingClicked;
+     private Switch mTapsSwitch;
+@@ -94,6 +95,7 @@ public class ScreenRecordDialog extends SystemUIDialog {
+         mController = controller;
+         mUserContextProvider = userContextProvider;
+         mOnStartRecordingClicked = onStartRecordingClicked;
++        mIsHEVCAllowed = controller.isHEVCAllowed();
+     }
+ 
+     @Override
+@@ -124,6 +126,13 @@ public class ScreenRecordDialog extends SystemUIDialog {
+             dismiss();
+         });
+ 
++        if (!mIsHEVCAllowed) {
++            View hevcView = findViewById(R.id.show_hevc);
++            if (hevcView != null) {
++                hevcView.setVisibility(View.GONE);
++            }
++        }
++
+         mAudioSwitch = findViewById(R.id.screenrecord_audio_switch);
+         mTapsSwitch = findViewById(R.id.screenrecord_taps_switch);
+         mSkipSwitch = findViewById(R.id.screenrecord_skip_switch);
+@@ -168,7 +177,7 @@ public class ScreenRecordDialog extends SystemUIDialog {
+         boolean lowQuality = mLowQualitySwitch.isChecked();
+         boolean longerDuration = mLongerSwitch.isChecked();
+         boolean skipTime = mSkipSwitch.isChecked();
+-        boolean hevc = mHEVCSwitch.isChecked();
++        boolean hevc = mIsHEVCAllowed && mHEVCSwitch.isChecked();
+         ScreenRecordingAudioSource audioMode = mAudioSwitch.isChecked()
+                 ? (ScreenRecordingAudioSource) mOptions.getSelectedItem()
+                 : NONE;
+@@ -214,7 +223,7 @@ public class ScreenRecordDialog extends SystemUIDialog {
+         Prefs.putInt(userContext, PREFS + PREF_AUDIO, mAudioSwitch.isChecked() ? 1 : 0);
+         Prefs.putInt(userContext, PREFS + PREF_AUDIO_SOURCE, mOptions.getSelectedItemPosition());
+         Prefs.putInt(userContext, PREFS + PREF_SKIP, mSkipSwitch.isChecked() ? 1 : 0);
+-        Prefs.putInt(userContext, PREFS + PREF_HEVC, mHEVCSwitch.isChecked() ? 1 : 0);
++        Prefs.putInt(userContext, PREFS + PREF_HEVC, mIsHEVCAllowed && mHEVCSwitch.isChecked() ? 1 : 0);
+     }
+ 
+     private void loadPrefs() {
+@@ -226,6 +235,6 @@ public class ScreenRecordDialog extends SystemUIDialog {
+         mAudioSwitch.setChecked(Prefs.getInt(userContext, PREFS + PREF_AUDIO, 0) == 1);
+         mOptions.setSelection(Prefs.getInt(userContext, PREFS + PREF_AUDIO_SOURCE, 0));
+         mSkipSwitch.setChecked(Prefs.getInt(userContext, PREFS + PREF_SKIP, 0) == 1);
+-        mHEVCSwitch.setChecked(Prefs.getInt(userContext, PREFS + PREF_HEVC, 1) == 1);
++        mHEVCSwitch.setChecked(mIsHEVCAllowed && Prefs.getInt(userContext, PREFS + PREF_HEVC, 1) == 1);
+     }
+ }
+diff --git a/packages/SystemUI/src/com/android/systemui/screenrecord/ScreenRecordPermissionDialogDelegate.kt b/packages/SystemUI/src/com/android/systemui/screenrecord/ScreenRecordPermissionDialogDelegate.kt
+index 305a3fa561b9..62442e625aee 100644
+--- a/packages/SystemUI/src/com/android/systemui/screenrecord/ScreenRecordPermissionDialogDelegate.kt
++++ b/packages/SystemUI/src/com/android/systemui/screenrecord/ScreenRecordPermissionDialogDelegate.kt
+@@ -68,6 +68,7 @@ class ScreenRecordPermissionDialogDelegate(
+         R.color.screenrecord_icon_color
+     ),
+     SystemUIDialog.Delegate {
++    private val isHEVCAllowed: Boolean = controller.isHEVCAllowed()
+     private lateinit var tapsSwitch: Switch
+     private lateinit var tapsSwitchContainer: ViewGroup
+     private lateinit var tapsView: View
+@@ -166,6 +167,11 @@ class ScreenRecordPermissionDialogDelegate(
+         tapsView = dialog.requireViewById(R.id.show_taps)
+         updateTapsViewVisibility()
+ 
++        if (!isHEVCAllowed) {
++            val hevcView: View = dialog.requireViewById(R.id.show_hevc)
++            hevcView.visibility = GONE
++        }
++
+         options = dialog.requireViewById(R.id.screen_recording_options)
+         val a: ArrayAdapter<*> =
+             ScreenRecordingAdapter(
+@@ -219,7 +225,7 @@ class ScreenRecordPermissionDialogDelegate(
+         val showStopDot = stopDotSwitch.isChecked
+         val lowQuality = lowQualitySwitch.isChecked
+         val longerDuration = longerDurationSwitch.isChecked
+-        val hevc = hevcSwitch.isChecked
++        val hevc = isHEVCAllowed && hevcSwitch.isChecked
+         val startIntent =
+             PendingIntent.getForegroundService(
+                 userContext,
+@@ -258,7 +264,7 @@ class ScreenRecordPermissionDialogDelegate(
+         Prefs.putInt(userContext, PREF_AUDIO, if (audioSwitch.isChecked) 1 else 0)
+         Prefs.putInt(userContext, PREF_AUDIO_SOURCE, options.selectedItemPosition)
+         Prefs.putInt(userContext, PREF_SKIP, if (skipTimeSwitch.isChecked) 1 else 0)
+-        Prefs.putInt(userContext, PREF_HEVC, if (hevcSwitch.isChecked) 1 else 0)
++        Prefs.putInt(userContext, PREF_HEVC, if (isHEVCAllowed && hevcSwitch.isChecked) 1 else 0)
+     }
+ 
+     private fun loadPrefs() {
+@@ -270,7 +276,7 @@ class ScreenRecordPermissionDialogDelegate(
+         audioSwitch.isChecked = Prefs.getInt(userContext, PREF_AUDIO, 0) == 1
+         options.setSelection(Prefs.getInt(userContext, PREF_AUDIO_SOURCE, 0))
+         skipTimeSwitch.isChecked = Prefs.getInt(userContext, PREF_SKIP, 0) == 1
+-        hevcSwitch.isChecked = Prefs.getInt(userContext, PREF_HEVC, 1) == 1
++        hevcSwitch.isChecked = isHEVCAllowed && Prefs.getInt(userContext, PREF_HEVC, 1) == 1
+     }
+ 
+     private inner class CaptureTargetResultReceiver() :
+-- 
+2.39.2
+
