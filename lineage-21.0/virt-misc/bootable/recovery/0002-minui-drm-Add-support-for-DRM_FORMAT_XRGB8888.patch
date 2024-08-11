@@ -1,0 +1,94 @@
+From 582091030de7c65b50849c661eb8a6a16a58cdbd Mon Sep 17 00:00:00 2001
+From: Yumi Yukimura <me.cafebabe@gmail.com>
+Date: Thu, 8 Aug 2024 19:06:45 +0800
+Subject: [PATCH 2/2] minui: drm: Add support for DRM_FORMAT_XRGB8888
+
+* Used for VMSVGA graphics card in VirtualBox and VMware.
+* It looks like vmwgfx_kms.c handles 4 formats: ARGB8888, XRGB8888,
+  RGB565, and XRGB1555. RGB565 isn't working, minui doesn't handle
+  XRGB1555, ARGB8888 works only for VirtualBox, only XRGB8888 works
+  for both VirtualBox (7.0.20) and VMware (17.5.2).
+
+Change-Id: I42f5b82254c596c349fcb7dd6d42de7cb9dad3ac
+---
+ minui/graphics.cpp          | 5 ++++-
+ minui/graphics_drm.cpp      | 2 ++
+ minui/include/minui/minui.h | 1 +
+ minui/resources.cpp         | 6 ++++--
+ 4 files changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/minui/graphics.cpp b/minui/graphics.cpp
+index c18db187..98f2a153 100644
+--- a/minui/graphics.cpp
++++ b/minui/graphics.cpp
+@@ -258,7 +258,8 @@ void gr_texticon(int x, int y, const GRSurface* icon) {
+ 
+ void gr_color(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+   uint32_t r32 = r, g32 = g, b32 = b, a32 = a;
+-  if (pixel_format == PixelFormat::ARGB || pixel_format == PixelFormat::BGRA) {
++  if (pixel_format == PixelFormat::ARGB || pixel_format == PixelFormat::BGRA ||
++      pixel_format == PixelFormat::BGRX) {
+     gr_current = (a32 << 24) | (r32 << 16) | (g32 << 8) | b32;
+   } else if (pixel_format == PixelFormat::RGBA) {
+     gr_current = (b32 << 24) | (g32 << 16) | (r32 << 8) | a32;
+@@ -420,6 +421,8 @@ int gr_init(std::initializer_list<GraphicsBackend> backends) {
+     pixel_format = PixelFormat::BGRA;
+   } else if (format == "RGBA_8888") {
+     pixel_format = PixelFormat::RGBA;
++  } else if (format == "BGRX_8888") {
++    pixel_format = PixelFormat::BGRX;
+   } else {
+     pixel_format = PixelFormat::UNKNOWN;
+   }
+diff --git a/minui/graphics_drm.cpp b/minui/graphics_drm.cpp
+index 6c3a5bde..bc732119 100644
+--- a/minui/graphics_drm.cpp
++++ b/minui/graphics_drm.cpp
+@@ -91,6 +91,8 @@ std::unique_ptr<GRSurfaceDrm> GRSurfaceDrm::Create(int drm_fd, int width, int he
+     format = DRM_FORMAT_XBGR8888;
+   } else if (pixel_format == PixelFormat::ARGB) {
+     format = DRM_FORMAT_BGRA8888;
++  } else if (pixel_format == PixelFormat::BGRX) {
++    format = DRM_FORMAT_XRGB8888;
+   } else {
+     format = DRM_FORMAT_RGB565;
+   }
+diff --git a/minui/include/minui/minui.h b/minui/include/minui/minui.h
+index 8eea0557..7753ddab 100644
+--- a/minui/include/minui/minui.h
++++ b/minui/include/minui/minui.h
+@@ -103,6 +103,7 @@ enum class PixelFormat : int {
+   BGRA = 3,
+   ARGB = 4,
+   RGBA = 5, // LSB Alpha
++  BGRX = 6,
+ };
+ 
+ enum class GraphicsBackend : int {
+diff --git a/minui/resources.cpp b/minui/resources.cpp
+index 1521c8f1..ce157219 100644
+--- a/minui/resources.cpp
++++ b/minui/resources.cpp
+@@ -224,7 +224,8 @@ int res_create_display_surface(const char* name, GRSurface** pSurface) {
+   }
+ 
+   PixelFormat pixel_format = gr_pixel_format();
+-  if (pixel_format == PixelFormat::ARGB || pixel_format == PixelFormat::BGRA) {
++  if (pixel_format == PixelFormat::ARGB || pixel_format == PixelFormat::BGRA ||
++      pixel_format == PixelFormat::BGRX) {
+     png_set_bgr(png_ptr);
+   } else if (pixel_format == PixelFormat::RGBA) {
+     png_set_swap_alpha(png_ptr);
+@@ -298,7 +299,8 @@ int res_create_multi_display_surface(const char* name, int* frames, int* fps,
+     surface[i] = created_surface.release();
+   }
+ 
+-  if (gr_pixel_format() == PixelFormat::ARGB || gr_pixel_format() == PixelFormat::BGRA) {
++  if (gr_pixel_format() == PixelFormat::ARGB || gr_pixel_format() == PixelFormat::BGRA ||
++      gr_pixel_format() == PixelFormat::BGRX) {
+     png_set_bgr(png_ptr);
+   } else if (gr_pixel_format() == PixelFormat::RGBA) {
+     png_set_swap_alpha(png_ptr);
+-- 
+2.39.2
+

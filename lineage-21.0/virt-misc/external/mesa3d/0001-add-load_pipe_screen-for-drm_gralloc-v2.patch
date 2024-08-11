@@ -1,0 +1,61 @@
+From 0756ef9a348a9058c624cea0314ecf562d46f1c3 Mon Sep 17 00:00:00 2001
+From: Qiang Yu <Qiang.Yu@amd.com>
+Date: Mon, 17 Jul 2017 14:40:00 +0800
+Subject: [PATCH] add load_pipe_screen for drm_gralloc (v2)
+
+ Conflicts:
+	src/gallium/auxiliary/pipe-loader/pipe_loader.h
+
+(v2) Removed argument for unsigned flags (now called config)
+---
+ src/gallium/auxiliary/pipe-loader/pipe_loader.h     | 3 +++
+ src/gallium/auxiliary/pipe-loader/pipe_loader_drm.c | 9 +++++++++
+ src/gallium/targets/dri/dri.sym                     | 1 +
+ 3 files changed, 13 insertions(+)
+
+diff --git a/src/gallium/auxiliary/pipe-loader/pipe_loader.h b/src/gallium/auxiliary/pipe-loader/pipe_loader.h
+index ab89ed6f6a8..f58eef1051a 100644
+--- a/src/gallium/auxiliary/pipe-loader/pipe_loader.h
++++ b/src/gallium/auxiliary/pipe-loader/pipe_loader.h
+@@ -206,6 +206,9 @@ pipe_loader_drm_probe_fd(struct pipe_loader_device **dev, int fd);
+ const struct driOptionDescription *
+ pipe_loader_drm_get_driconf_by_name(const char *driver_name, unsigned *count);
+ 
++struct pipe_screen *
++load_pipe_screen(struct pipe_loader_device **dev, int fd);
++
+ #ifdef __cplusplus
+ }
+ #endif
+diff --git a/src/gallium/auxiliary/pipe-loader/pipe_loader_drm.c b/src/gallium/auxiliary/pipe-loader/pipe_loader_drm.c
+index 0f227c335f4..e99837550f7 100644
+--- a/src/gallium/auxiliary/pipe-loader/pipe_loader_drm.c
++++ b/src/gallium/auxiliary/pipe-loader/pipe_loader_drm.c
+@@ -291,3 +291,12 @@ static const struct pipe_loader_ops pipe_loader_drm_ops = {
+    .get_driconf = pipe_loader_drm_get_driconf,
+    .release = pipe_loader_drm_release
+ };
++
++PUBLIC struct pipe_screen *load_pipe_screen(struct pipe_loader_device **dev, int fd)
++{
++   struct pipe_screen *pscreen = NULL;
++   if (pipe_loader_drm_probe_fd(dev, fd)) {
++      pscreen = pipe_loader_create_screen(*dev);
++   }
++   return pscreen;
++}
+diff --git a/src/gallium/targets/dri/dri.sym b/src/gallium/targets/dri/dri.sym
+index 7f7a93b02ff..7fcc571fffc 100644
+--- a/src/gallium/targets/dri/dri.sym
++++ b/src/gallium/targets/dri/dri.sym
+@@ -2,6 +2,7 @@
+ 	global:
+ 		__driDriverExtensions;
+ 		__driDriverGetExtensions*;
++		load_pipe_screen;
+ 		nouveau_drm_screen_create;
+ 		radeon_drm_winsys_create;
+ 		amdgpu_winsys_create;
+-- 
+2.39.2
+
