@@ -1,4 +1,4 @@
-From 089abc3e7a04524bb1f4d3549ae31fe973f759ca Mon Sep 17 00:00:00 2001
+From b9670790ae6d4c0b8733a8d618579697cc41a00d Mon Sep 17 00:00:00 2001
 From: Android Build Server 2 <build@AndroidBuild-2>
 Date: Fri, 21 Jun 2024 05:16:34 +0000
 Subject: [PATCH] roomservice: Disable by default
@@ -9,7 +9,7 @@ Change-Id: I7f1988eeb1cb220ea96f4c2d7a7a80d5d50f825a
  1 file changed, 3 insertions(+)
 
 diff --git a/build/tools/roomservice.py b/build/tools/roomservice.py
-index 0ad310ec..69af2855 100755
+index 62102ca4..5d0b6cb8 100755
 --- a/build/tools/roomservice.py
 +++ b/build/tools/roomservice.py
 @@ -40,6 +40,9 @@ except ImportError:
@@ -19,9 +19,9 @@ index 0ad310ec..69af2855 100755
 +if not os.getenv('ENABLE_ROOMSERVICE') == "true":
 +    sys.exit(0)
 +
- product = sys.argv[1]
- 
- if len(sys.argv) > 2:
+ dryrun = os.getenv('ROOMSERVICE_DRYRUN') == "true"
+ if dryrun:
+     print("Dry run roomservice, no change will be made.")
 -- 
 2.39.2
 
