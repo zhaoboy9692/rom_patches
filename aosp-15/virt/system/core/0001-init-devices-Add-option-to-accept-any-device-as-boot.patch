@@ -1,0 +1,39 @@
+From a7a45a302fbd56dffca699138ce1ad373132463d Mon Sep 17 00:00:00 2001
+From: Yumi Yukimura <me.cafebabe@gmail.com>
+Date: Tue, 2 Jan 2024 07:34:14 +0800
+Subject: [PATCH] init: devices: Add option to accept any device as boot device
+
+Targets like PCs/VMs usually don't have fixed boot devices.
+
+For example, moving the disk to another controller would result
+in getting different block device path.
+
+To workaround this situation, add an option to bypass the boot
+device filter, so that every block devices would get their
+symlink in /dev/block/by-name/.
+
+Usage: Specify `androidboot.boot_devices=any` on bootconfig or cmdline
+
+Test: /dev/block/by-name/* exists when `androidboot.boot_devices=any`
+Change-Id: I5ae0faf401dac71352dbb05115a2dd6f3e76adc2
+---
+ init/devices.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/init/devices.cpp b/init/devices.cpp
+index e76786a6d..b70423355 100644
+--- a/init/devices.cpp
++++ b/init/devices.cpp
+@@ -407,7 +407,8 @@ std::vector<std::string> DeviceHandler::GetBlockDeviceSymlinks(const Uevent& uev
+ 
+     auto link_path = "/dev/block/" + type + "/" + device;
+ 
+-    bool is_boot_device = boot_devices_.find(device) != boot_devices_.end();
++    bool is_boot_device = boot_devices_.find(device) != boot_devices_.end() ||
++        boot_devices_.find("any") != boot_devices_.end();
+     if (!uevent.partition_name.empty()) {
+         std::string partition_name_sanitized(uevent.partition_name);
+         SanitizePartitionName(&partition_name_sanitized);
+-- 
+2.39.2
+

@@ -1,0 +1,28 @@
+From c80083bca09b9d5dccbfe5cc9ae92897414fde58 Mon Sep 17 00:00:00 2001
+From: me-cafebabe <me.cafebabe@gmail.com>
+Date: Sun, 20 Aug 2023 08:27:00 +0000
+Subject: [PATCH] bpfloader: Don't spam dmesg please
+
+Change-Id: Ic47a58b6113cbab1ba7f85dc390c3bb0cd7883ed
+---
+ loader/BpfLoader.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/loader/BpfLoader.cpp b/loader/BpfLoader.cpp
+index 3f13291..f88b0db 100644
+--- a/loader/BpfLoader.cpp
++++ b/loader/BpfLoader.cpp
+@@ -144,8 +144,8 @@ int createSysFsBpfSubDir(const char* const prefix) {
+     return 0;
+ }
+ 
+-int main(int __unused argc, char** argv, char * const envp[]) {
+-    android::base::InitLogging(argv, &android::base::KernelLogger);
++int main(int __unused argc, char** __unused argv, char * const envp[]) {
++    //android::base::InitLogging(argv, &android::base::KernelLogger);
+ 
+     // Load all ELF objects, create programs and maps, and pin them
+     for (const auto& location : locations) {
+-- 
+2.39.2
+

@@ -1,0 +1,38 @@
+From 283f36f2c981c2ec737ba829e47ad7c74bf24092 Mon Sep 17 00:00:00 2001
+From: me-cafebabe <me_cafebabe@hotmail.com>
+Date: Wed, 7 Sep 2022 07:52:27 +0000
+Subject: [PATCH 1/2] android: variable: Add Target_init_vendor_lib product
+ variable
+
+Change-Id: I544eac86b25249a7f8e1309d29532e2f2e571ba0
+---
+ android/variable.go | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/android/variable.go b/android/variable.go
+index 2500140f3..fc532dfae 100644
+--- a/android/variable.go
++++ b/android/variable.go
+@@ -190,6 +190,10 @@ type variableProperties struct {
+ 			Required        []string
+ 			Vintf_fragments []string
+ 		}
++
++		Target_init_vendor_lib struct {
++			Whole_static_libs []string
++		}
+ 	} `android:"arch_variant"`
+ }
+ 
+@@ -346,6 +350,8 @@ type ProductVariables struct {
+ 	NativeCoverageExcludePaths  []string `json:",omitempty"`
+ 	ClangCoverageContinuousMode *bool    `json:",omitempty"`
+ 
++	Target_init_vendor_lib *string `json:",omitempty"`
++
+ 	// Set by NewConfig
+ 	Native_coverage *bool `json:",omitempty"`
+ 
+-- 
+2.39.2
+
