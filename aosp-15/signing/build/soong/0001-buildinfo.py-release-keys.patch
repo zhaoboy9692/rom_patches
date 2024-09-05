@@ -1,0 +1,26 @@
+From cb887463d8d88aa652d266b8b4328b4e3fda1806 Mon Sep 17 00:00:00 2001
+From: Android Build Server 2 <build@AndroidBuild-2>
+Date: Thu, 5 Sep 2024 12:28:09 +0000
+Subject: [PATCH] buildinfo.py: release-keys
+
+Change-Id: I93acdf380864d63089d47deba012151f7d60bc0c
+---
+ scripts/buildinfo.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/buildinfo.py b/scripts/buildinfo.py
+index 45c9bc30d..ca9d0f5de 100755
+--- a/scripts/buildinfo.py
++++ b/scripts/buildinfo.py
+@@ -64,7 +64,7 @@ def main():
+ 
+   build_hostname = option.build_hostname_file.read().strip()
+   build_number = option.build_number_file.read().strip()
+-  build_version_tags = option.build_keys
++  build_version_tags = "release-keys"
+   if option.build_type == "debug":
+     build_version_tags = "debug," + build_version_tags
+ 
+-- 
+2.39.2
+
