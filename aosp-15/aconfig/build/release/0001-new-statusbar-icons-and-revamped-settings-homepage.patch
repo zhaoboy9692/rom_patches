@@ -1,0 +1,68 @@
+From 8ad2b711ff31bb661074d20ad84b7e72385e0a24 Mon Sep 17 00:00:00 2001
+From: Android Build Server 2 <build@AndroidBuild-2>
+Date: Fri, 6 Sep 2024 18:29:30 +0000
+Subject: [PATCH 1/2] new statusbar icons and revamped settings homepage
+
+Change-Id: Ibe4114048b629b0b49c1f7ce3fdd04865c9e9a78
+---
+ .../com.android.settings.flags/homepage_revamp.textproto    | 6 ++++++
+ .../new_status_bar_icons.textproto                          | 6 ++++++
+ .../com.android.settings.flags/homepage_revamp.textproto    | 6 ++++++
+ .../new_status_bar_icons.textproto                          | 6 ++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 aconfig/ap3a/com.android.settings.flags/homepage_revamp.textproto
+ create mode 100644 aconfig/ap3a/com.android.settingslib.flags/new_status_bar_icons.textproto
+ create mode 100644 aconfig/trunk_staging/com.android.settings.flags/homepage_revamp.textproto
+ create mode 100644 aconfig/trunk_staging/com.android.settingslib.flags/new_status_bar_icons.textproto
+
+diff --git a/aconfig/ap3a/com.android.settings.flags/homepage_revamp.textproto b/aconfig/ap3a/com.android.settings.flags/homepage_revamp.textproto
+new file mode 100644
+index 0000000..bc78c0e
+--- /dev/null
++++ b/aconfig/ap3a/com.android.settings.flags/homepage_revamp.textproto
+@@ -0,0 +1,6 @@
++flag_value {
++  package: "com.android.settings.flags"
++  name: "homepage_revamp"
++  state: ENABLED
++  permission: READ_WRITE
++}
+diff --git a/aconfig/ap3a/com.android.settingslib.flags/new_status_bar_icons.textproto b/aconfig/ap3a/com.android.settingslib.flags/new_status_bar_icons.textproto
+new file mode 100644
+index 0000000..e24e4ff
+--- /dev/null
++++ b/aconfig/ap3a/com.android.settingslib.flags/new_status_bar_icons.textproto
+@@ -0,0 +1,6 @@
++flag_value {
++  package: "com.android.settingslib.flags"
++  name: "new_status_bar_icons"
++  state: ENABLED
++  permission: READ_WRITE
++}
+diff --git a/aconfig/trunk_staging/com.android.settings.flags/homepage_revamp.textproto b/aconfig/trunk_staging/com.android.settings.flags/homepage_revamp.textproto
+new file mode 100644
+index 0000000..bc78c0e
+--- /dev/null
++++ b/aconfig/trunk_staging/com.android.settings.flags/homepage_revamp.textproto
+@@ -0,0 +1,6 @@
++flag_value {
++  package: "com.android.settings.flags"
++  name: "homepage_revamp"
++  state: ENABLED
++  permission: READ_WRITE
++}
+diff --git a/aconfig/trunk_staging/com.android.settingslib.flags/new_status_bar_icons.textproto b/aconfig/trunk_staging/com.android.settingslib.flags/new_status_bar_icons.textproto
+new file mode 100644
+index 0000000..e24e4ff
+--- /dev/null
++++ b/aconfig/trunk_staging/com.android.settingslib.flags/new_status_bar_icons.textproto
+@@ -0,0 +1,6 @@
++flag_value {
++  package: "com.android.settingslib.flags"
++  name: "new_status_bar_icons"
++  state: ENABLED
++  permission: READ_WRITE
++}
+-- 
+2.39.2
+

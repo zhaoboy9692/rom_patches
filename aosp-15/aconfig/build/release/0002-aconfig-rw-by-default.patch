@@ -1,0 +1,23 @@
+From f609b126a9fb4e1a698df40c50d3f95bd64210c4 Mon Sep 17 00:00:00 2001
+From: Android Build Server 2 <build@AndroidBuild-2>
+Date: Fri, 6 Sep 2024 19:49:08 +0000
+Subject: [PATCH 2/2] aconfig rw by default
+
+Change-Id: If3a8642848b6f083daa0f734d53eac6415d33d25
+---
+ .../ap3a/RELEASE_ACONFIG_FLAG_DEFAULT_PERMISSION.textproto      | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/flag_values/ap3a/RELEASE_ACONFIG_FLAG_DEFAULT_PERMISSION.textproto b/flag_values/ap3a/RELEASE_ACONFIG_FLAG_DEFAULT_PERMISSION.textproto
+index aeffb82..6fe0903 100644
+--- a/flag_values/ap3a/RELEASE_ACONFIG_FLAG_DEFAULT_PERMISSION.textproto
++++ b/flag_values/ap3a/RELEASE_ACONFIG_FLAG_DEFAULT_PERMISSION.textproto
+@@ -1,4 +1,4 @@
+ name: "RELEASE_ACONFIG_FLAG_DEFAULT_PERMISSION"
+ value: {
+-  string_value: "READ_ONLY"
++  string_value: "READ_WRITE"
+ }
+-- 
+2.39.2
+
