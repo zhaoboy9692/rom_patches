@@ -1,0 +1,26 @@
+From 8acd4f9f6a25dafc587faf6f602b0c4d9f7b80cb Mon Sep 17 00:00:00 2001
+From: Yumi Yukimura <me.cafebabe@gmail.com>
+Date: Thu, 10 Oct 2024 16:32:28 +0800
+Subject: [PATCH] sepolicy: private: Label `ro.usb.uvc.payload_transfer_size`
+ property
+
+Change-Id: I6f2c284642bc66f7ac7f35f54c70c70d050f6453
+---
+ private/property_contexts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/private/property_contexts b/private/property_contexts
+index 1e4330ed0..71058ab81 100644
+--- a/private/property_contexts
++++ b/private/property_contexts
+@@ -1641,6 +1641,7 @@ vibrator.adaptive_haptics.enabled u:object_r:adaptive_haptics_prop:s0 exact stri
+ 
+ # UVC Gadget property
+ ro.usb.uvc.enabled      u:object_r:usb_uvc_enabled_prop:s0 exact bool
++ro.usb.uvc.payload_transfer_size u:object_r:usb_uvc_enabled_prop:s0 exact uint
+ 
+ # System UI notification properties
+ persist.sysui.notification.ranking_update_ashmem u:object_r:persist_sysui_ranking_update_prop:s0 exact bool
+-- 
+2.39.5
+
