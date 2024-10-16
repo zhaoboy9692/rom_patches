@@ -1,4 +1,4 @@
-From b0c1e23c3d03af212f250da49069077460aa3ab4 Mon Sep 17 00:00:00 2001
+From c65e74c4203ca14de065da4d0155e5b708d11e00 Mon Sep 17 00:00:00 2001
 From: me-cafebabe <me.cafebabe@gmail.com>
 Date: Mon, 20 Mar 2023 20:01:50 +0800
 Subject: [PATCH 4/6] Add property to disable APCF extended features

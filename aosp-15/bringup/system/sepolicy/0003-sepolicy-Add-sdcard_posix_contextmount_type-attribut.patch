@@ -1,4 +1,4 @@
-From ad8d04aa1e6b85fc492f1ad464c59652c06d8650 Mon Sep 17 00:00:00 2001
+From 26031bba332a8aff23ff73c2966dcf866e96129b Mon Sep 17 00:00:00 2001
 From: LuK1337 <priv.luk@gmail.com>
 Date: Tue, 7 Apr 2020 13:12:18 +0200
 Subject: [PATCH 3/6] sepolicy: Add sdcard_posix_contextmount_type attribute
@@ -16,8 +16,9 @@ Change-Id: I0dfe49cc0b34dfcce2840198843bde1272cbc61c
  prebuilts/api/202404/public/domain.te  | 2 +-
  prebuilts/api/34.0/public/attributes   | 3 +++
  prebuilts/api/34.0/public/domain.te    | 2 +-
+ private/domain.te                      | 2 +-
  public/attributes                      | 3 +++
- 5 files changed, 11 insertions(+), 2 deletions(-)
+ 6 files changed, 12 insertions(+), 3 deletions(-)
 
 diff --git a/prebuilts/api/202404/public/attributes b/prebuilts/api/202404/public/attributes
 index 759b773a2..9cd89fa33 100644
@@ -65,6 +66,19 @@ index 979577f22..68ceefbcd 100644
 --- a/prebuilts/api/34.0/public/domain.te
 +++ b/prebuilts/api/34.0/public/domain.te
 @@ -492,7 +492,7 @@ neverallow { domain -recovery } rootfs:file { create write setattr relabelto app
+ 
+ # Restrict context mounts to specific types marked with
+ # the contextmount_type attribute.
+-neverallow * {fs_type -contextmount_type}:filesystem relabelto;
++neverallow * {fs_type -contextmount_type -sdcard_posix_contextmount_type}:filesystem relabelto;
+ 
+ # Ensure that context mount types are not writable, to ensure that
+ # the write to /system restriction above is not bypassed via context=
+diff --git a/private/domain.te b/private/domain.te
+index a638f9a8b..11602b5ac 100644
+--- a/private/domain.te
++++ b/private/domain.te
+@@ -744,7 +744,7 @@ neverallow { domain -recovery } rootfs:file { create write setattr relabelto app
  
  # Restrict context mounts to specific types marked with
  # the contextmount_type attribute.

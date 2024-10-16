@@ -1,4 +1,4 @@
-From 9dc1cd5498b3dc7e7abe0815ede6f9bda8db5e72 Mon Sep 17 00:00:00 2001
+From 13f89ad2b66e28af5eccda5c42413147c78bccc4 Mon Sep 17 00:00:00 2001
 From: Nolen Johnson <johnsonnolen@gmail.com>
 Date: Sun, 17 Jul 2022 21:33:52 -0400
 Subject: [PATCH 6/6] private: Exempt system_app from adbd_config_prop

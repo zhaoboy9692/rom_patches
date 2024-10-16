@@ -1,4 +1,4 @@
-From ad65f0aef0794b54b53e2bf180e65bc827a08ec9 Mon Sep 17 00:00:00 2001
+From 800c5724bb1fa824ac9ddfcaa32842d3696988a1 Mon Sep 17 00:00:00 2001
 From: Gabriele M <moto.falcon.git@gmail.com>
 Date: Wed, 25 Jan 2017 02:09:04 +0100
 Subject: [PATCH 2/6] sepolicy: Allow recovery to alter /
@@ -9,7 +9,8 @@ Change-Id: I53332a57ce7879d7ba63c4ea3e27add01f5a3a90
 ---
  prebuilts/api/202404/public/domain.te | 4 ++--
  prebuilts/api/34.0/public/domain.te   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ private/domain.te                     | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/prebuilts/api/202404/public/domain.te b/prebuilts/api/202404/public/domain.te
 index 7cbfe7f00..9a40c38d5 100644
@@ -31,6 +32,21 @@ index 7e672b3c9..979577f22 100644
 --- a/prebuilts/api/34.0/public/domain.te
 +++ b/prebuilts/api/34.0/public/domain.te
 @@ -487,8 +487,8 @@ neverallow { domain -kernel with_asan(`-asan_extract') } { system_file_type vend
+ # Don't allow mounting on top of /system files or directories
+ neverallow * exec_type:dir_file_class_set mounton;
+ 
+-# Nothing should be writing to files in the rootfs.
+-neverallow * rootfs:file { create write setattr relabelto append unlink link rename };
++# Nothing should be writing to files in the rootfs, except recovery.
++neverallow { domain -recovery } rootfs:file { create write setattr relabelto append unlink link rename };
+ 
+ # Restrict context mounts to specific types marked with
+ # the contextmount_type attribute.
+diff --git a/private/domain.te b/private/domain.te
+index 11d80c448..a638f9a8b 100644
+--- a/private/domain.te
++++ b/private/domain.te
+@@ -739,8 +739,8 @@ neverallow { domain -kernel with_asan(`-asan_extract') } { system_file_type vend
  # Don't allow mounting on top of /system files or directories
  neverallow * exec_type:dir_file_class_set mounton;
  
