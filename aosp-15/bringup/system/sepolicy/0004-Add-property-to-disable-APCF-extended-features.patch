@@ -1,4 +1,4 @@
-From 7a590f0ee9b63ee111d52fdf7c0b0eedbef38149 Mon Sep 17 00:00:00 2001
+From b0c1e23c3d03af212f250da49069077460aa3ab4 Mon Sep 17 00:00:00 2001
 From: me-cafebabe <me.cafebabe@gmail.com>
 Date: Mon, 20 Mar 2023 20:01:50 +0800
 Subject: [PATCH 4/6] Add property to disable APCF extended features
@@ -52,5 +52,5 @@ index 9b48082e2..ee28c2129 100644
  bluetooth.profile.a2dp.source.enabled                u:object_r:bluetooth_config_prop:s0 exact bool
  bluetooth.profile.asha.central.enabled               u:object_r:bluetooth_config_prop:s0 exact bool
 -- 
-2.39.2
+2.39.5
 

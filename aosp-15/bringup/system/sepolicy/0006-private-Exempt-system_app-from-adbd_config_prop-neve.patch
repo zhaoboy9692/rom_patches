@@ -1,4 +1,4 @@
-From bb0618c182a4c84389c95b6111a275fdf78186b9 Mon Sep 17 00:00:00 2001
+From 9dc1cd5498b3dc7e7abe0815ede6f9bda8db5e72 Mon Sep 17 00:00:00 2001
 From: Nolen Johnson <johnsonnolen@gmail.com>
 Date: Sun, 17 Jul 2022 21:33:52 -0400
 Subject: [PATCH 6/6] private: Exempt system_app from adbd_config_prop
@@ -78,5 +78,5 @@ index 19513d93f..14ec5db71 100644
  } {
    adbd_config_prop
 -- 
-2.39.2
+2.39.5
 

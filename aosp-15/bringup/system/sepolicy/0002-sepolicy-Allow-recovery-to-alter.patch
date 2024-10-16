@@ -1,4 +1,4 @@
-From a72655cc7068d6114c3e3afdec5cf3f64c77ceea Mon Sep 17 00:00:00 2001
+From ad65f0aef0794b54b53e2bf180e65bc827a08ec9 Mon Sep 17 00:00:00 2001
 From: Gabriele M <moto.falcon.git@gmail.com>
 Date: Wed, 25 Jan 2017 02:09:04 +0100
 Subject: [PATCH 2/6] sepolicy: Allow recovery to alter /
@@ -42,5 +42,5 @@ index 7e672b3c9..979577f22 100644
  # Restrict context mounts to specific types marked with
  # the contextmount_type attribute.
 -- 
-2.39.2
+2.39.5
 
