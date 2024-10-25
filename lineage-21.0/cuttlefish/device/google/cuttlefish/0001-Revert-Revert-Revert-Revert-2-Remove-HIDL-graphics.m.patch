@@ -1,0 +1,37 @@
+From fbfee670c05fe2778186d197631d393478d7078f Mon Sep 17 00:00:00 2001
+From: Android Build Server 2 <build@AndroidBuild-2>
+Date: Thu, 24 Oct 2024 21:00:39 +0000
+Subject: [PATCH] Revert "Revert "Revert "Revert^2 "Remove HIDL graphics.mapper
+ service fr...""
+
+This reverts commit 4ec8f4fe1dd1f102b3a9c0795cf358d8d8f5e8b4.
+---
+ shared/graphics/device_vendor.mk      | 1 +
+ tests/hal/hal_implementation_test.cpp | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/shared/graphics/device_vendor.mk b/shared/graphics/device_vendor.mk
+index 2d01146ef..0bd21ad9a 100644
+--- a/shared/graphics/device_vendor.mk
++++ b/shared/graphics/device_vendor.mk
+@@ -63,4 +63,5 @@ PRODUCT_PACKAGES += com.google.cf.gralloc
+ 
+ PRODUCT_PACKAGES += \
+     android.hardware.graphics.allocator-service.minigbm \
++    android.hardware.graphics.mapper@4.0-impl.minigbm \
+     mapper.minigbm
+diff --git a/tests/hal/hal_implementation_test.cpp b/tests/hal/hal_implementation_test.cpp
+index 71439b584..fa11a168b 100644
+--- a/tests/hal/hal_implementation_test.cpp
++++ b/tests/hal/hal_implementation_test.cpp
+@@ -100,7 +100,6 @@ static const std::set<std::string> kKnownMissingHidl = {
+     "android.hardware.graphics.composer@2.4", // converted to AIDL, see b/193240715
+     "android.hardware.graphics.mapper@2.1",
+     "android.hardware.graphics.mapper@3.0",
+-    "android.hardware.graphics.mapper@4.0", // converted to Stable C, see b/205761028
+     "android.hardware.health.storage@1.0", // converted to AIDL, see b/177470478
+     "android.hardware.health@2.1", // converted to AIDL, see b/177269435
+     "android.hardware.input.classifier@1.0", // converted to AIDL, see b/205761620
+-- 
+2.39.5
+

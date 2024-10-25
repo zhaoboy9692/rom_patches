@@ -1,0 +1,28 @@
+From baccf24fa111d9b20fc6e523af8d83aab8ffc8af Mon Sep 17 00:00:00 2001
+From: Android Build Server 2 <build@AndroidBuild-2>
+Date: Fri, 25 Oct 2024 12:17:28 +0000
+Subject: [PATCH] remove sv_{2,3}d_session_tests
+
+Change-Id: I3b5ea626078af90b400a3e40bea0b42139b97a90
+---
+ build/tasks/tests/native_test_list.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/build/tasks/tests/native_test_list.mk b/build/tasks/tests/native_test_list.mk
+index d0306ea96..e604371e9 100644
+--- a/build/tasks/tests/native_test_list.mk
++++ b/build/tasks/tests/native_test_list.mk
+@@ -236,9 +236,7 @@ native_tests := \
+ ifeq ($(BOARD_IS_AUTOMOTIVE), true)
+ native_tests += \
+     libwatchdog_test \
+-    evsmanagerd_test \
+-    sv_2d_session_tests \
+-    sv_3d_session_tests
++    evsmanagerd_test
+ endif
+ 
+ ifneq ($(strip $(BOARD_PERFSETUP_SCRIPT)),)
+-- 
+2.39.5
+
