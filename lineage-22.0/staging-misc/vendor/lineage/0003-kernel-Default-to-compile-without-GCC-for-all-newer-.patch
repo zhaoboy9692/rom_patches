@@ -1,0 +1,36 @@
+From 58813349621c061be59ab77ed47d44447aa13f4d Mon Sep 17 00:00:00 2001
+From: Yumi Yukimura <me.cafebabe@gmail.com>
+Date: Sun, 29 Sep 2024 02:48:22 +0800
+Subject: [PATCH 3/6] kernel: Default to compile without GCC for all newer
+ kernels
+
+Change-Id: Ie044118725b15d2107f259abdf770a7db4b24c66
+---
+ config/BoardConfigKernel.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/config/BoardConfigKernel.mk b/config/BoardConfigKernel.mk
+index 9e7bcdcf..0168b016 100644
+--- a/config/BoardConfigKernel.mk
++++ b/config/BoardConfigKernel.mk
+@@ -76,12 +76,14 @@ TARGET_KERNEL_VERSION ?= $(shell echo $(KERNEL_VERSION)"."$(KERNEL_PATCHLEVEL))
+ 
+ # 5.10+ can fully compile without GCC by default
+ ifneq ($(KERNEL_VERSION),)
+-    ifeq ($(shell expr $(KERNEL_VERSION) \>= 6), 1)
+-        TARGET_KERNEL_NO_GCC ?= true
+-    else ifeq ($(shell expr $(KERNEL_VERSION) \>= 5), 1)
++    ifeq ($(shell expr $(KERNEL_VERSION) \< 5), 1)
++        # empty
++    else ifeq ($(KERNEL_VERSION), 5)
+         ifeq ($(shell expr $(KERNEL_PATCHLEVEL) \>= 10), 1)
+             TARGET_KERNEL_NO_GCC ?= true
+         endif
++    else
++        TARGET_KERNEL_NO_GCC ?= true
+     endif
+ endif
+ 
+-- 
+2.39.5
+
