@@ -1,4 +1,4 @@
-From d3317b34ce3bd9586eaee40c45d526ad12e590a0 Mon Sep 17 00:00:00 2001
+From d970034457704cb0cb797aadedd4f2bd730ebce6 Mon Sep 17 00:00:00 2001
 From: Ido Ben-Hur <idoybh2@gmail.com>
 Date: Fri, 12 Jul 2024 09:24:49 +0300
 Subject: [PATCH] SystemUI: screenrecord: Allow disabling HEVC toggle via a
@@ -35,13 +35,13 @@ index 5a316d5c9e3c..174498cd6d72 100644
 \ No newline at end of file
 +</LinearLayout>
 diff --git a/packages/SystemUI/res/values/lineage_config.xml b/packages/SystemUI/res/values/lineage_config.xml
-index 79c2865567a7..f779a97a21a6 100644
+index 3bcd3ea0c82d..d3832ff565c7 100644
 --- a/packages/SystemUI/res/values/lineage_config.xml
 +++ b/packages/SystemUI/res/values/lineage_config.xml
-@@ -70,4 +70,7 @@
-          Possible values: 3, 3.1, 3.2, 4, 4.1, 4.2
-     -->
-     <string name="config_screenRecorderAVCProfileLevel" translatable="false">4.2</string>
+@@ -73,4 +73,7 @@
+ 
+     <!-- Whether to play turbulence noise after clicking the play button -->
+     <bool name="config_turbulenceNoise">true</bool>
 +
 +    <!-- Whether to enable HEVC toggle for screenrecord -->
 +    <bool name="config_screenRecordHEVC">true</bool>
@@ -198,5 +198,5 @@ index 305a3fa561b9..62442e625aee 100644
  
      private inner class CaptureTargetResultReceiver() :
 -- 
-2.39.2
+2.39.5
 
