@@ -1,0 +1,25 @@
+From 089f98e375fe3e01f2926a7b309e521f0ab87283 Mon Sep 17 00:00:00 2001
+From: Android Build Server 2 <build@AndroidBuild-2>
+Date: Sun, 24 Nov 2024 09:08:07 +0000
+Subject: [PATCH] r 4.19: Allow SYSVIPC
+
+Change-Id: Ia28bdb57af115b921c2655ba22aed9c20ea609ef
+---
+ r/android-4.19/android-base.config | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/r/android-4.19/android-base.config b/r/android-4.19/android-base.config
+index fef4c6f..0cde263 100644
+--- a/r/android-4.19/android-base.config
++++ b/r/android-4.19/android-base.config
+@@ -10,7 +10,6 @@
+ # CONFIG_NFS_FS is not set
+ # CONFIG_PM_AUTOSLEEP is not set
+ # CONFIG_RT_GROUP_SCHED is not set
+-# CONFIG_SYSVIPC is not set
+ # CONFIG_USELIB is not set
+ # CONFIG_VHOST is not set
+ CONFIG_ADVISE_SYSCALLS=y
+-- 
+2.39.5
+
