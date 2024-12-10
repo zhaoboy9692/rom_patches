@@ -1,7 +1,7 @@
-From a0d2b41c52e934b111d8fe4121c8bf8cba4ca45a Mon Sep 17 00:00:00 2001
+From ff29ea04b96cf75a91120a7636175f8b69540966 Mon Sep 17 00:00:00 2001
 From: Yumi Yukimura <me.cafebabe@gmail.com>
 Date: Thu, 24 Oct 2024 18:48:53 +0800
-Subject: [PATCH 2/6] lineage: products: Add Cuttlefish products
+Subject: [PATCH 2/7] lineage: products: Add Cuttlefish products
 
 How-to:
 1. Build and install cuttlefish packages by following [1]
@@ -42,7 +42,7 @@ Change-Id: I7d69db7be99d250f02d7e76fd398ebf5c2ca7c5f
  create mode 100644 build/target/product/lineage_cf_tv_x86_64.mk
 
 diff --git a/build/target/product/AndroidProducts.mk b/build/target/product/AndroidProducts.mk
-index 9410937e..8731d0f9 100644
+index 3cc9d95c..d324a661 100644
 --- a/build/target/product/AndroidProducts.mk
 +++ b/build/target/product/AndroidProducts.mk
 @@ -15,6 +15,11 @@
@@ -57,8 +57,8 @@ index 9410937e..8731d0f9 100644
      $(LOCAL_DIR)/lineage_gsi_arm.mk \
      $(LOCAL_DIR)/lineage_gsi_arm64.mk \
      $(LOCAL_DIR)/lineage_gsi_x86.mk \
-@@ -33,6 +38,11 @@ PRODUCT_MAKEFILES := \
-     $(LOCAL_DIR)/lineage_sdk_tv_x86.mk
+@@ -34,6 +39,11 @@ PRODUCT_MAKEFILES := \
+     $(LOCAL_DIR)/lineage_sdk_tv_x86_64.mk
  
  COMMON_LUNCH_CHOICES := \
 +    lineage_cf_car_arm64-userdebug \

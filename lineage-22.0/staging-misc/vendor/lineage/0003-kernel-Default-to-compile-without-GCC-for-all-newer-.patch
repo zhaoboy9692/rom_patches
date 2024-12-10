@@ -1,7 +1,7 @@
-From 58813349621c061be59ab77ed47d44447aa13f4d Mon Sep 17 00:00:00 2001
+From 404de7d7015a83bb0b7ef4087d6cf1cadd34d4eb Mon Sep 17 00:00:00 2001
 From: Yumi Yukimura <me.cafebabe@gmail.com>
 Date: Sun, 29 Sep 2024 02:48:22 +0800
-Subject: [PATCH 3/6] kernel: Default to compile without GCC for all newer
+Subject: [PATCH 3/7] kernel: Default to compile without GCC for all newer
  kernels
 
 Change-Id: Ie044118725b15d2107f259abdf770a7db4b24c66
@@ -10,7 +10,7 @@ Change-Id: Ie044118725b15d2107f259abdf770a7db4b24c66
  1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/config/BoardConfigKernel.mk b/config/BoardConfigKernel.mk
-index 9e7bcdcf..0168b016 100644
+index 65e6183a..2125719a 100644
 --- a/config/BoardConfigKernel.mk
 +++ b/config/BoardConfigKernel.mk
 @@ -76,12 +76,14 @@ TARGET_KERNEL_VERSION ?= $(shell echo $(KERNEL_VERSION)"."$(KERNEL_PATCHLEVEL))

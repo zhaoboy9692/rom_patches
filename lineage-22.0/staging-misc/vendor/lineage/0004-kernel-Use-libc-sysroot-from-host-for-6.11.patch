@@ -1,7 +1,7 @@
-From 0e603c15ada63265783c1bd3b7036266a58f9f78 Mon Sep 17 00:00:00 2001
+From 3c0adbf52f5e351561bdba980fa12b61d74207ab Mon Sep 17 00:00:00 2001
 From: Yumi Yukimura <me.cafebabe@gmail.com>
 Date: Sun, 29 Sep 2024 03:50:19 +0800
-Subject: [PATCH 4/6] kernel: Use libc sysroot from host for 6.11+
+Subject: [PATCH 4/7] kernel: Use libc sysroot from host for 6.11+
 
 Linux kernel 6.11 has removed support for old libc versions by commit
 [1]. The commit message implies it's done as part of retiring
@@ -18,7 +18,7 @@ Change-Id: I9210a9b4742304214d90f7d319b06167f0508052
  1 file changed, 23 insertions(+), 2 deletions(-)
 
 diff --git a/config/BoardConfigKernel.mk b/config/BoardConfigKernel.mk
-index 0168b016..cb4a6aa8 100644
+index 2125719a..a5975d88 100644
 --- a/config/BoardConfigKernel.mk
 +++ b/config/BoardConfigKernel.mk
 @@ -30,6 +30,8 @@

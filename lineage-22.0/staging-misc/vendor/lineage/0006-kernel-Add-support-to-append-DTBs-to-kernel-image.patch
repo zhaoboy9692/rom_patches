@@ -1,7 +1,7 @@
-From 7678af2f88e36b5d61ec29ca6aedb28b8038a9fb Mon Sep 17 00:00:00 2001
+From e0e91fb3562354608d70910058aa68d4f9ecaf7d Mon Sep 17 00:00:00 2001
 From: Yumi Yukimura <me.cafebabe@gmail.com>
 Date: Tue, 9 Jan 2024 15:53:23 +0800
-Subject: [PATCH 6/6] kernel: Add support to append DTBs to kernel image
+Subject: [PATCH 6/7] kernel: Add support to append DTBs to kernel image
 
 * Many Qualcomm targets that uses boot header v0 or v1
   have the DTBs appended to the end of kernel image.

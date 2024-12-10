@@ -1,7 +1,7 @@
-From 91e2dfb5dbe930dc16071f725b89b6abbde7d2cc Mon Sep 17 00:00:00 2001
+From c1242be4197efac894b292faaaa8f3a761114e1c Mon Sep 17 00:00:00 2001
 From: Yumi Yukimura <me.cafebabe@gmail.com>
 Date: Wed, 25 Sep 2024 16:52:22 +0800
-Subject: [PATCH 5/6] kernel: Fix building x86 kernel with GCC
+Subject: [PATCH 5/7] kernel: Fix building x86 kernel with GCC
 
 Change-Id: Ib1097d604776adc63c31b90cec9a0d13729248be
 ---
@@ -23,7 +23,7 @@ index 7f95a34b..51b1a8a7 100644
  endif
  
 diff --git a/config/BoardConfigKernel.mk b/config/BoardConfigKernel.mk
-index cb4a6aa8..d6d9b54e 100644
+index a5975d88..ef4a5646 100644
 --- a/config/BoardConfigKernel.mk
 +++ b/config/BoardConfigKernel.mk
 @@ -142,7 +142,7 @@ ifneq ($(KERNEL_NO_GCC), true)
