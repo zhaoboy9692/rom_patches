@@ -1,4 +1,4 @@
-From c21fb90aec9d3230fb77cfef6de83cd871dec3b4 Mon Sep 17 00:00:00 2001
+From 60f3117e14f7cc24cefba1ffb0ed4e1fd6670d04 Mon Sep 17 00:00:00 2001
 From: Vivekachooz <vivekachooz@gmail.com>
 Date: Sun, 9 Apr 2017 01:29:27 +0200
 Subject: [PATCH] init: Squashed import of snet spoofing
@@ -76,10 +76,10 @@ Signed-off-by: Alexander Winkowski <dereference23@outlook.com>
  1 file changed, 99 insertions(+), 2 deletions(-)
 
 diff --git a/init/property_service.cpp b/init/property_service.cpp
-index b4bb3116f..851eb0f44 100644
+index b0871890f..bb64864e1 100644
 --- a/init/property_service.cpp
 +++ b/init/property_service.cpp
-@@ -136,6 +136,8 @@ struct PropertyAuditData {
+@@ -132,6 +132,8 @@ struct PropertyAuditData {
      const char* name;
  };
  
@@ -88,7 +88,7 @@ index b4bb3116f..851eb0f44 100644
  static int PropertyAuditCallback(void* data, security_class_t /*cls*/, char* buf, size_t len) {
      auto* d = reinterpret_cast<PropertyAuditData*>(data);
  
-@@ -410,8 +412,8 @@ static std::optional<uint32_t> PropertySet(const std::string& name, const std::s
+@@ -406,8 +408,8 @@ static std::optional<uint32_t> PropertySet(const std::string& name, const std::s
      } else {
          prop_info* pi = (prop_info*)__system_property_find(name.c_str());
          if (pi != nullptr) {
@@ -99,7 +99,7 @@ index b4bb3116f..851eb0f44 100644
                  *error = "Read-only property was already set";
                  return {PROP_ERROR_READ_ONLY_PROPERTY};
              }
-@@ -877,6 +879,98 @@ static void load_override_properties() {
+@@ -873,6 +875,98 @@ static void load_override_properties() {
      }
  }
  
@@ -198,7 +198,7 @@ index b4bb3116f..851eb0f44 100644
  // If the ro.product.[brand|device|manufacturer|model|name] properties have not been explicitly
  // set, derive them from ro.product.${partition}.* properties
  static void property_initialize_ro_product_props() {
-@@ -1257,6 +1351,9 @@ void PropertyLoadBootDefaults() {
+@@ -1253,6 +1347,9 @@ void PropertyLoadBootDefaults() {
      property_initialize_ro_vendor_api_level();
  
      update_sys_usb_config();
@@ -207,7 +207,7 @@ index b4bb3116f..851eb0f44 100644
 +    workaround_snet_properties();
  }
  
- bool LoadPropertyInfoFromFile(const std::string& filename,
+ void PropertyLoadDerivedDefaults() {
 -- 
 2.39.5
 
