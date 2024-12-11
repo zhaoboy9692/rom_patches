@@ -1,4 +1,4 @@
-From e0e91fb3562354608d70910058aa68d4f9ecaf7d Mon Sep 17 00:00:00 2001
+From 464e47fc40e7aa965a64a53d74e00bcb78e1f707 Mon Sep 17 00:00:00 2001
 From: Yumi Yukimura <me.cafebabe@gmail.com>
 Date: Tue, 9 Jan 2024 15:53:23 +0800
 Subject: [PATCH 6/7] kernel: Add support to append DTBs to kernel image

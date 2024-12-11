@@ -1,4 +1,4 @@
-From 404de7d7015a83bb0b7ef4087d6cf1cadd34d4eb Mon Sep 17 00:00:00 2001
+From f3bee88bc7200b485b063cde4c3a96b1f10adfdd Mon Sep 17 00:00:00 2001
 From: Yumi Yukimura <me.cafebabe@gmail.com>
 Date: Sun, 29 Sep 2024 02:48:22 +0800
 Subject: [PATCH 3/7] kernel: Default to compile without GCC for all newer

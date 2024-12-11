@@ -1,4 +1,4 @@
-From c1242be4197efac894b292faaaa8f3a761114e1c Mon Sep 17 00:00:00 2001
+From cecf4f6c7ca5536cfd7aabf477881c89cf0e1320 Mon Sep 17 00:00:00 2001
 From: Yumi Yukimura <me.cafebabe@gmail.com>
 Date: Wed, 25 Sep 2024 16:52:22 +0800
 Subject: [PATCH 5/7] kernel: Fix building x86 kernel with GCC

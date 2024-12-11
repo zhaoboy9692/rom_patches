@@ -1,4 +1,4 @@
-From 7eb301a01f98b561ff4bae24ba11a88f1f6d42e6 Mon Sep 17 00:00:00 2001
+From ab86f27ddb6bd36428698a3766838999d5bbc012 Mon Sep 17 00:00:00 2001
 From: Yumi Yukimura <me.cafebabe@gmail.com>
 Date: Fri, 25 Oct 2024 03:38:25 +0800
 Subject: [PATCH 1/7] init.lineage-system_ext.rc: Rename `bugreport` service

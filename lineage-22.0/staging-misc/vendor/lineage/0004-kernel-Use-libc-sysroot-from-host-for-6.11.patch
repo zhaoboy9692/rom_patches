@@ -1,4 +1,4 @@
-From 3c0adbf52f5e351561bdba980fa12b61d74207ab Mon Sep 17 00:00:00 2001
+From b6072350404fe680741a066735d3517f39e40ab3 Mon Sep 17 00:00:00 2001
 From: Yumi Yukimura <me.cafebabe@gmail.com>
 Date: Sun, 29 Sep 2024 03:50:19 +0800
 Subject: [PATCH 4/7] kernel: Use libc sysroot from host for 6.11+
